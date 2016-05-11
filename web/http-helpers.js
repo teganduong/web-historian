@@ -2,7 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 
-exports.headers = {
+exports.headers = headers = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'access-control-allow-headers': 'content-type, accept',
@@ -11,11 +11,26 @@ exports.headers = {
 };
 
 exports.serveAssets = function(res, asset, callback) {
-  // Write some code here that helps serve up your static files!
-  // (Static files are things like html (yours or archived from others...),
-  // css, or anything that doesn't change often.)
+  fs.readFile(archive.paths.siteAssets + asset, 'utf8', function(err, data) {
+    console.log('===+++++ asset: ', asset);
+    if (err) {
+      fs.readFile(archive.paths.archivedSites + asset, 'utf8', function(err, data) {
+        if (err) { 
+          console.error('Error in serving assets: ', err); 
+          respond(404, 'Not found', res);
+        }
+        callback(data);
+      });
+    }
+    callback(data);
+  });
 };
 
 
 
 // As you progress, keep thinking about what helper functions you can put here!
+
+exports.respond = respond = function(statusCode, data, res) {
+  res.writeHead(statusCode, headers);
+  res.end(data);
+};

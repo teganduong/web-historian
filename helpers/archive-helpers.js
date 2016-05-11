@@ -41,7 +41,7 @@ exports.isUrlInList = function(url, callback) {
 };
 
 exports.addUrlToList = function(url, callback) {
-  fs.writeFile(exports.paths.list, url, function() {
+  fs.appendFile(exports.paths.list, url + '\n', function() {
     callback();
   });
 };

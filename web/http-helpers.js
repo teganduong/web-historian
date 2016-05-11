@@ -1,6 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
+var _ = require('underscore');
 
 exports.headers = headers = {
   'access-control-allow-origin': '*',
@@ -35,4 +36,14 @@ exports.serveAssets = function(res, asset, callback) {
 exports.respond = respond = function(statusCode, data, res) {
   res.writeHead(statusCode, headers);
   res.end(data);
+};
+
+exports.collectData = function(req, callback) {
+  var data = '';
+  req.on('data', function(chunk) {
+    data += chunk;
+  });
+  req.on('end', function() {
+    callback(data);
+  });
 };

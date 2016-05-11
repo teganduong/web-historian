@@ -13,9 +13,10 @@ exports.handleRequest = function (req, res) {
     console.log('==>>++>> req.url: ', req.url);
 
     return utils.serveAssets(res, route, function(content) {
-      utils.respond(200, content, res);
-      console.log('******** content: ', content);
-      return content;
+      if (content) {
+        utils.respond(200, content, res);
+      }
+      utils.respond(404, 'Not Found', res);
     });
   }
 

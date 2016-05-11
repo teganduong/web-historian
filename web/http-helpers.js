@@ -12,9 +12,10 @@ exports.headers = headers = {
 
 exports.serveAssets = function(res, asset, callback) {
   fs.readFile(archive.paths.siteAssets + asset, 'utf8', function(err, data) {
-    console.log('===+++++ asset: ', asset);
+    console.log('===+++++ archive.paths.siteAssets: ', archive.paths.siteAssets);
     if (err) {
       fs.readFile(archive.paths.archivedSites + asset, 'utf8', function(err, data) {
+        console.log('$$$$$$$ data from serving archivedSites: ', data);
         if (err) { 
           console.error('Error in serving assets: ', err); 
           respond(404, 'Not found', res);
@@ -22,6 +23,7 @@ exports.serveAssets = function(res, asset, callback) {
         callback(data);
       });
     }
+    console.log('+++++++ data from serving index.html: ', data);
     callback(data);
   });
 };

@@ -15,7 +15,7 @@ exports.handleRequest = function (req, res) {
       if (content) {
         utils.respond(200, content, res);
       } else {
-        utils.respond(404, 'Not Found', res);
+        return archive.isUrlInList(filePath) ? utils.reroute(res) : utils.respond(404, 'Not Found', res);
       }
     });
   }

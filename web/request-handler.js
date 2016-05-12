@@ -9,13 +9,14 @@ exports.handleRequest = function (req, res) {
 
   if (req.method === 'GET') {
     var filePath = url.parse(req.url).pathname;
-    var route = req.url === '/' ? '/index.html' : filePath;
+    var route = filePath === '/' ? '/index.html' : filePath;
 
-    return utils.serveAssets(res, route, function(content) {
+    utils.serveAssets(res, route, function(content) {
       if (content) {
         utils.respond(200, content, res);
+      } else {
+        utils.respond(404, 'Not Found', res);
       }
-      utils.respond(404, 'Not Found', res);
     });
   }
 
@@ -24,8 +25,7 @@ exports.handleRequest = function (req, res) {
     return utils.collectData(req, function(data) {
       var site = data.split('=')[1];
       archive.addUrlToList(site, function() {
-        utils.respond(302, 'Found', res);
-        
+        utils.respond(302, data, res);
       });
     });
   }
